@@ -1,6 +1,6 @@
 $directory = get-item $PWD
 $found = ""
-while ($directory.FullName -ne "/") {
+while ($directory) {
     $fn = ($directory.FullName + "/Dockerfile")
     $rc = Get-Item -Force -ErrorAction SilentlyContinue $fn
     if ($rc.Exists) {
@@ -10,11 +10,7 @@ while ($directory.FullName -ne "/") {
     $directory = $directory.Parent
 }
 
-if ($found) { 
-    $commands=@(docker-compose run $directory.Name)
-    $commands+=($args[1..($args.length - 1)]) -join " "
-    $theCommand = "cmd.exe /c """ + ($commands -join " && ") + """"
-    Write-Host $theCommand
-    Invoke-Expression $theCommand
+if ($found) {
+    $command=@("docker-compose run", $directory.Name) + $args -join " "
+    Invoke-Expression $command
 }
-

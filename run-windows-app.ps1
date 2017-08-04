@@ -5,7 +5,7 @@ $directory = get-item $PWD
 $found = ""
 $windowsFound = ""
 
-while ($directory.FullName -ne "/") {
+while ($directory) {
     $fn = ($directory.FullName + "/.envrc")
     $rc = Get-Item -Force -ErrorAction SilentlyContinue $fn
     if ($rc.Exists) {
